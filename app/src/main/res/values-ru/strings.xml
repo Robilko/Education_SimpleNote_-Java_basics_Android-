@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Простые заметки</string>
+    <string name="create_new_note">Новая заметка</string>
+    <string name="note_item_head">Заголовок</string>
+    <string name="note_text_body">Добавьте текст заметки</string>
+    <string name="note_item_date">Дата создания: \u0020</string>
+    <string name="save_btn_name">Сохранить</string>
+    <string name="create_note_title">Новая заметка</string>
+    <string name="edit_note_title">Редактировать заметку</string>
+</resources>
