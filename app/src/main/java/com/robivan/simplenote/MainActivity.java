@@ -2,7 +2,6 @@ package com.robivan.simplenote;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
@@ -53,8 +52,12 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     public void saveNote(NoteEntity note) {
         getSupportFragmentManager().popBackStack();
         NoteListFragment noteListFragment = (NoteListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT);
-        noteListFragment.addNote(note);
+        if (noteListFragment != null) {
+            noteListFragment.addNote(note);
+        }
         EditNoteFragment editNoteFragment = (EditNoteFragment) getSupportFragmentManager().findFragmentByTag(EDIT_NOTES_FRAGMENT);
-        getSupportFragmentManager().beginTransaction().remove(editNoteFragment).commit();
+        if (editNoteFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(editNoteFragment).commit();
+        }
     }
 }
