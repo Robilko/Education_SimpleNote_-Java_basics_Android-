@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
                 .add(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT)
                 .commit();
     }
+
     private void showEditNote() {
         showEditNote(null);
     }

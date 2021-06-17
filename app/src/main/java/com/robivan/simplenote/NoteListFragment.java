@@ -38,7 +38,6 @@ public class NoteListFragment extends Fragment {
         createNoteButton.setOnClickListener(v -> getContract().createNewNote());
     }
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

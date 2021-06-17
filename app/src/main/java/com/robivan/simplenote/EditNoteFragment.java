@@ -60,7 +60,6 @@ public class EditNoteFragment extends Fragment {
                 noteHeading.getText().toString(),
                 noteTextBody.getText().toString(),
                 note == null ? NoteEntity.getCurrentDate() : note.date);
-
     }
 
     private void fillNote(NoteEntity note) {
