@@ -2,12 +2,14 @@ package com.robivan.simplenote;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity implements NoteListFragment.Contract, EditNoteFragment.Contract {
     private static final String NOTES_LIST_FRAGMENT = "NOTES_LIST_FRAGMENT";
+    private static final String EDIT_NOTES_FRAGMENT = "EDIT_NOTES_FRAGMENT";
     private boolean isTwoPanel = false;
 
     @Override
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         if (!isTwoPanel) {
             transaction.addToBackStack(null);
         }
-        transaction.add(isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container, EditNoteFragment.newInstance(noteEntity))
+        transaction.add(isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container, EditNoteFragment.newInstance(noteEntity), EDIT_NOTES_FRAGMENT)
         .commit();
     }
 
@@ -52,5 +54,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         getSupportFragmentManager().popBackStack();
         NoteListFragment noteListFragment = (NoteListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT);
         noteListFragment.addNote(note);
+        EditNoteFragment editNoteFragment = (EditNoteFragment) getSupportFragmentManager().findFragmentByTag(EDIT_NOTES_FRAGMENT);
+        getSupportFragmentManager().beginTransaction().remove(editNoteFragment).commit();
     }
 }
