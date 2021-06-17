@@ -21,7 +21,7 @@ public class NoteListFragment extends Fragment {
     private MaterialButton createNoteButton;
     private LinearLayout listLayout;
 
-    private ArrayList<NoteEntity> noteList = new ArrayList<>();
+    private final ArrayList<NoteEntity> noteList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,10 +35,9 @@ public class NoteListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         renderList(noteList);
-        createNoteButton.setOnClickListener(v -> {
-            getContract().createNewNote();
-        });
+        createNoteButton.setOnClickListener(v -> getContract().createNewNote());
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -70,9 +69,7 @@ public class NoteListFragment extends Fragment {
         for (NoteEntity note : notes) {
             Button button = new Button(getContext());
             button.setText(note.title);
-            button.setOnClickListener(v -> {
-                getContract().editNote(note);
-            });
+            button.setOnClickListener(v -> getContract().editNote(note));
             listLayout.addView(button);
         }
     }
