@@ -7,4 +7,13 @@
     <string name="save_btn_name">Save</string>
     <string name="create_note_title">New note</string>
     <string name="edit_note_title">Edit note</string>
+    <string name="about_app_menu_title">About app</string>
+    <string name="settings_menu_title">Settings</string>
+    <string name="settings_toast">Don\'t realised yet</string>
+    <string name="about_app_toast">
+        \"Simple Notes\" app was made as study project at GeekBrains University course of Android development.
+        \n
+        \n Developer: Robilko Alexandr
+        \n e-mail: sasha.robson@google.com
+    </string>
 </resources>

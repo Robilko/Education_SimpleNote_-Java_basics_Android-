@@ -8,4 +8,13 @@
     <string name="save_btn_name">Сохранить</string>
     <string name="create_note_title">Новая заметка</string>
     <string name="edit_note_title">Редактировать заметку</string>
+    <string name="about_app_menu_title">О приложении</string>
+    <string name="settings_menu_title">Настройки</string>
+    <string name="settings_toast">Пока не реализовано</string>
+    <string name="about_app_toast">
+        Приложение \"Простые заметки\" было разработано как учебный проект на курсе разработки под Android Университета GeekBrains.
+        \n
+        \n Разработчик: Робилко Александр
+        \n e-mail: sasha.robson@google.com
+    </string>
 </resources>
