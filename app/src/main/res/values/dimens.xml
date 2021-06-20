@@ -5,4 +5,6 @@
     <dimen name="button_height">56dp</dimen>
     <dimen name="heading_text_size">28sp</dimen>
     <dimen name="body_text_size">20sp</dimen>
+    <dimen name="nav_header_height">200dp</dimen>
+    <dimen name="nav_header_dimen">42sp</dimen>
 </resources>
