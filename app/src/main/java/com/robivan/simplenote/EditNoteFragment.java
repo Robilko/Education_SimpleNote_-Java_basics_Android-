@@ -47,9 +47,6 @@ public class EditNoteFragment extends Fragment {
         if (getArguments() != null) {
             note = (NoteEntity)getArguments().getSerializable(NOTE_EXTRA_KEY);
         }
-        if (getActivity() != null) {
-            getActivity().setTitle(note == null ? R.string.create_note_title : R.string.edit_note_title);
-        }
         fillNote(note);
         saveButton.setOnClickListener(v -> getContract().saveNote(collectNote()));
     }
