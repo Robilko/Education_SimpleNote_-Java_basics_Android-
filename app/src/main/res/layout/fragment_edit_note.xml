@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/edit_note_background"
+    android:padding="@dimen/default_padding">
+
+    <EditText
+        android:id="@+id/note_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/note_item_head"
+        android:textStyle="bold"
+        android:textSize="@dimen/heading_text_size" />
+
+    <EditText
+        android:id="@+id/note_text_body"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="@string/note_text_body"
+        android:gravity="start"
+        android:textSize="@dimen/body_text_size" />
+
+    <TextView
+        android:id="@+id/note_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/body_text_size" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/save_btn_name"/>
+
+</LinearLayout>

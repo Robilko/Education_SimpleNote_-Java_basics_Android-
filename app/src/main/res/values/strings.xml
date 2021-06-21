@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">SimpleNote</string>
+    <string name="app_name">SimpleNotes</string>
+    <string name="create_new_note">New note</string>
+    <string name="note_item_head">Heading</string>
+    <string name="note_text_body">Add text note</string>
+    <string name="note_item_date">Date of create: \u0020</string>
+    <string name="save_btn_name">Save</string>
+    <string name="create_note_title">New note</string>
+    <string name="edit_note_title">Edit note</string>
 </resources>
