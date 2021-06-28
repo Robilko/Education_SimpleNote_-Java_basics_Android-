@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="100"
+        android:title="@string/settings"/>
+
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:orderInCategory="20"
+        android:title="@string/favorites"/>
+
+    <item
+        android:id="@+id/action_deleted"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:orderInCategory="30"
+        android:title="@string/deleted"/>
+</menu>
