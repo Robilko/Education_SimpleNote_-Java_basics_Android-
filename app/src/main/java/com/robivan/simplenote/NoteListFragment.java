@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class NoteListFragment extends Fragment {
     private MaterialButton createNoteButton;
     private RecyclerView recyclerView;
-    private  NotesAdapter adapter;
+    private NotesAdapter adapter;
 
     private final ArrayList<NoteEntity> noteList = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class NoteListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
         createNoteButton = view.findViewById(R.id.create_new_note);
-        recyclerView = view.findViewById(R.id.recycle_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         return view;
     }
 
@@ -62,6 +62,10 @@ public class NoteListFragment extends Fragment {
             if (note.id.equals(id)) return note;
         }
         return null;
+    }
+
+    public static int getTitle() {
+        return R.string.notes_list_title;
     }
 
     private Contract getContract() {

@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
@@ -39,16 +41,13 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (navigateFragment(id)) {
-                    drawer.closeDrawer(GravityCompat.START);
-                    return true;
-                }
-                return false;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (navigateFragment(id)) {
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
             }
+            return false;
         });
     }
 
@@ -106,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     }
 
     private void showNoteList() {
+        setTitle(NoteListFragment.getTitle());
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT)
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     private void showEditNote(@Nullable NoteEntity note) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (!isTwoPanel) {
-            setTitle(note == null ? R.string.create_note_title : R.string.edit_note_title);
+            setTitle(EditNoteFragment.getTitle(note == null));
             transaction.addToBackStack(null);
         }
         transaction.add(isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container, EditNoteFragment.newInstance(note), EDIT_NOTES_FRAGMENT)
@@ -138,15 +138,27 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
 
     @Override
     public void saveNote(NoteEntity note) {
-        setTitle(R.string.app_name);
-        getSupportFragmentManager().popBackStack();
-        NoteListFragment noteListFragment = (NoteListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack();
+
+        NoteListFragment noteListFragment = (NoteListFragment) fragmentManager.findFragmentByTag(NOTES_LIST_FRAGMENT);
         if (noteListFragment != null) {
             noteListFragment.addNote(note);
+            setTitle(NoteListFragment.getTitle());
         }
-        EditNoteFragment editNoteFragment = (EditNoteFragment) getSupportFragmentManager().findFragmentByTag(EDIT_NOTES_FRAGMENT);
+        EditNoteFragment editNoteFragment = (EditNoteFragment) fragmentManager.findFragmentByTag(EDIT_NOTES_FRAGMENT);
         if (editNoteFragment != null) {
             getSupportFragmentManager().beginTransaction().remove(editNoteFragment).commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
+        if (fragment instanceof NoteListFragment) {
+            setTitle(NoteListFragment.getTitle());
         }
     }
 }

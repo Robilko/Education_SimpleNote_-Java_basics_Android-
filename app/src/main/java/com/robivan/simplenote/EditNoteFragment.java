@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 
-public class EditNoteFragment extends Fragment {
+public class EditNoteFragment extends Fragment{
     private MaterialButton saveButton;
     private EditText noteHeading, noteTextBody;
     private TextView noteDateCreate;
@@ -73,6 +73,10 @@ public class EditNoteFragment extends Fragment {
         if (!(context instanceof Contract)) {
             throw new IllegalStateException("Activity must implement Contract");
         }
+    }
+
+    public static int getTitle(boolean newNote) {
+        return newNote ? R.string.create_note_title : R.string.edit_note_title;
     }
 
     private Contract getContract() {
