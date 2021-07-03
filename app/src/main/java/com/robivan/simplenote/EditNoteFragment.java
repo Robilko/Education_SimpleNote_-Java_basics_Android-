@@ -2,20 +2,19 @@ package com.robivan.simplenote;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.button.MaterialButton;
 
-public class EditNoteFragment extends Fragment{
+public class EditNoteFragment extends Fragment {
     private MaterialButton saveButton;
     private EditText noteHeading, noteTextBody;
     private TextView noteDateCreate;
@@ -45,7 +44,7 @@ public class EditNoteFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if (getArguments() != null) {
-            note = (NoteEntity)getArguments().getSerializable(NOTE_EXTRA_KEY);
+            note = (NoteEntity) getArguments().getSerializable(NOTE_EXTRA_KEY);
         }
         fillNote(note);
         saveButton.setOnClickListener(v -> getContract().saveNote(collectNote()));
@@ -64,7 +63,7 @@ public class EditNoteFragment extends Fragment{
         noteHeading.setText(note.title);
         noteTextBody.setText(note.noteText);
         String dateCreate = getResources().getString(R.string.note_item_date) + note.createDate;
-        noteDateCreate.setText( dateCreate);
+        noteDateCreate.setText(dateCreate);
     }
 
     @Override
@@ -80,10 +79,10 @@ public class EditNoteFragment extends Fragment{
     }
 
     private Contract getContract() {
-        return (Contract)getActivity();
+        return (Contract) getActivity();
     }
 
-    interface Contract{
+    interface Contract {
         void saveNote(NoteEntity note);
     }
 }

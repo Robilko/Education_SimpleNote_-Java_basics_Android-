@@ -16,7 +16,7 @@ public class NoteEntity implements Serializable {
         this.noteText = noteText;
         this.date = date;
         SimpleDateFormat dateFormat = new SimpleDateFormat("d-MM-y", Locale.getDefault());
-        createDate =  dateFormat.format(date);
+        createDate = dateFormat.format(date);
     }
 
     public static String generateNewId() {

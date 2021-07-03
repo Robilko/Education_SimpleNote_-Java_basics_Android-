@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 
 public class NoteListFragment extends Fragment {
@@ -58,7 +61,7 @@ public class NoteListFragment extends Fragment {
 
     @Nullable
     private NoteEntity findNoteById(String id) {
-        for(NoteEntity note : noteList) {
+        for (NoteEntity note : noteList) {
             if (note.id.equals(id)) return note;
         }
         return null;
@@ -69,11 +72,12 @@ public class NoteListFragment extends Fragment {
     }
 
     private Contract getContract() {
-        return (Contract)getActivity();
+        return (Contract) getActivity();
     }
 
-    interface Contract{
+    interface Contract {
         void createNewNote();
+
         void editNote(NoteEntity noteEntity);
     }
 }

@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         MenuItem search = menu.findItem(R.id.search_menu);
-        SearchView searchText = (SearchView)search.getActionView();
+        SearchView searchText = (SearchView) search.getActionView();
         searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.search_menu: //TODO реализовать поиск в заметках
                 Toast.makeText(this, getResources().getString(R.string.do_not_realised_toast), Toast.LENGTH_SHORT).show();
                 return true;
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
             transaction.addToBackStack(null);
         }
         transaction.add(isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container, EditNoteFragment.newInstance(note), EDIT_NOTES_FRAGMENT)
-        .commit();
+                .commit();
     }
 
     @Override
