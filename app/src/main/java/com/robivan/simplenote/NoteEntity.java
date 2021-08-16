@@ -11,14 +11,14 @@ public class NoteEntity implements Parcelable {
     private String id;
     private String title;
     private String noteText;
-    private String createDate;
+    private final String createDate;
     private long date;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("d-MM-y", Locale.getDefault());
 
     public NoteEntity(String title, String noteText, long date) {
         this.title = title;
         this.noteText = noteText;
         this.date = date;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("d-MM-y", Locale.getDefault());
         createDate = dateFormat.format(date);
     }
 

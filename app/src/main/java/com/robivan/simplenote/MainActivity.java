@@ -1,6 +1,5 @@
 package com.robivan.simplenote;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +24,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements NoteListFragment.Contract, EditNoteFragment.Contract, AuthFragment.Controller {
     private static final String NOTES_LIST_FRAGMENT = "NOTES_LIST_FRAGMENT";
     private static final String EDIT_NOTES_FRAGMENT = "EDIT_NOTES_FRAGMENT";
+    public static final String SHARED_PREFERENCE_NAME = "FragmentNavigation";
 
     private Navigation navigation;
     private boolean isTwoPanel = false;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     }
 
     private void readSettings() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Settings.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+        getSharedPreferences(SHARED_PREFERENCE_NAME, MODE_PRIVATE);
     }
 
     // регистрация drawer

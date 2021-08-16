@@ -14,16 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-
 public class NoteListFragment extends Fragment {
 
     private MaterialButton createNoteButton;
     private RecyclerView recyclerView;
     private NotesAdapter adapter;
     private NoteSource data;
-
-    private final ArrayList<NoteEntity> noteList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,9 +37,7 @@ public class NoteListFragment extends Fragment {
         adapter.setOnItemClickListener((item, position) -> getContract().editNote(item, position));
         data = new NoteSourceFirebaseImpl().init(noteSource -> adapter.notifyDataSetChanged());
         adapter.setDataSource(data);
-        createNoteButton.setOnClickListener(v -> {
-            getContract().createNewNote(data.size());
-        });
+        createNoteButton.setOnClickListener(v -> getContract().createNewNote(data.size()));
     }
 
     private void initView(View view) {

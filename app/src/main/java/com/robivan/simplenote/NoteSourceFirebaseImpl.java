@@ -10,6 +10,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class NoteSourceFirebaseImpl implements NoteSource {
 
@@ -36,7 +37,7 @@ public class NoteSourceFirebaseImpl implements NoteSource {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         notesData = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                             Map<String, Object> doc = document.getData();
                             String id = document.getId();
                             NoteEntity noteData = NoteMapping.toNoteData(id, doc);

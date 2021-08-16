@@ -52,12 +52,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleTextView, bodyTextView;
-        private final CardView cardView;
         private NoteEntity note;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardView = (CardView) itemView;
+            CardView cardView = (CardView) itemView;
             titleTextView = itemView.findViewById(R.id.subject_title_view);
             bodyTextView = itemView.findViewById(R.id.subject_text_view);
 

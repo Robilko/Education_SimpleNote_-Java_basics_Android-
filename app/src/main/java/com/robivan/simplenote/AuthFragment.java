@@ -61,7 +61,7 @@ public class AuthFragment extends Fragment {
                 .build();
 
         // Получаем клиента для регистрации и данные по клиенту
-        googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
     }
 
     // Инициализация пользовательских элементов
@@ -82,7 +82,7 @@ public class AuthFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // Проверим, входил ли пользователь в это приложение через Google
-        account = GoogleSignIn.getLastSignedInAccount(getContext());
+        account = GoogleSignIn.getLastSignedInAccount(requireContext());
         if (account != null) {
             // Пользователь уже входил, сделаем кнопку недоступной
             disableSign();

@@ -56,7 +56,7 @@ public class EditNoteFragment extends Fragment {
 
     private void hideKeyboardAfterRefocusing(EditText editText) {
         editText.setOnFocusChangeListener((view1, focused) -> {
-            InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager keyboard = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (focused)
                 keyboard.showSoftInput(editText, 0);
             else
@@ -66,6 +66,7 @@ public class EditNoteFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        assert getArguments() != null;
         if (getArguments().getParcelable(NOTE_EXTRA_KEY) != null) {
             note = getArguments().getParcelable(NOTE_EXTRA_KEY);
             position = getArguments().getInt(POSITION_EXTRA_KEY);
