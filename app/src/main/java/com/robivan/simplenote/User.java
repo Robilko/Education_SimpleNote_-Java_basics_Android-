@@ -2,7 +2,7 @@ package com.robivan.simplenote;
 
 public class User {
 
-    private static  String nameUser;
+    private static String nameUser;
 
     private static final User userData = new User();
 

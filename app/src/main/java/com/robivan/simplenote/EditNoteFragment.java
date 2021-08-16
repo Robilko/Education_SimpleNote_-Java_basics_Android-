@@ -76,15 +76,15 @@ public class EditNoteFragment extends Fragment {
     }
 
     private NoteEntity changeOrCreateNote() {
-        String name =  noteHeading.getText().toString();
+        String name = noteHeading.getText().toString();
         String description = noteTextBody.getText().toString();
         long date = NoteEntity.getCurrentDate();
-        if (note != null){
+        if (note != null) {
             note.setTitle(name);
             note.setNoteText(description);
             note.setDate(date);
             return note;
-        } else return new NoteEntity(name,description,date);
+        } else return new NoteEntity(name, description, date);
     }
 
     private void fillNote(NoteEntity note) {

@@ -12,7 +12,7 @@ public class NoteMapping {
     }
 
     public static NoteEntity toNoteData(String id, Map<String, Object> doc) {
-        NoteEntity answer = new NoteEntity((String) doc.get(Fields.NAME), (String) doc.get(Fields.DESCRIPTION),(long) doc.get(Fields.DATE));
+        NoteEntity answer = new NoteEntity((String) doc.get(Fields.NAME), (String) doc.get(Fields.DESCRIPTION), (long) doc.get(Fields.DATE));
         answer.setId(id);
         return answer;
     }

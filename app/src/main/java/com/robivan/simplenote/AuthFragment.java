@@ -57,7 +57,6 @@ public class AuthFragment extends Fragment {
         // идентификатор пользователя, его почту и основной профайл
         // (регулируется параметром)
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken (getString (R.string.server_client_id))
                 .requestEmail()
                 .build();
 
@@ -139,13 +138,13 @@ public class AuthFragment extends Fragment {
     }
 
     // Разрешить аутентификацию и запретить остальные действия
-    private void enableSign(){
+    private void enableSign() {
         buttonSignIn.setEnabled(true);
         continue_btn.setEnabled(false);
     }
 
     // Запретить аутентификацию (уже прошла) и разрешить остальные действия
-    private void disableSign(){
+    private void disableSign() {
         buttonSignIn.setEnabled(false);
         continue_btn.setEnabled(true);
     }

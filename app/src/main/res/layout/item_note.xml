@@ -8,7 +8,8 @@
     app:cardCornerRadius="@dimen/note_card_radius"
     app:cardElevation="@dimen/note_card_elevation"
     app:contentPadding="@dimen/default_padding"
-    android:layout_margin="@dimen/default_margin">
+    android:layout_marginHorizontal="@dimen/default_margin"
+    android:layout_marginVertical="@dimen/half_default_margin">
 
     <LinearLayout
         android:orientation="vertical"
@@ -21,14 +22,14 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="@dimen/heading_text_size"
-            tools:text="@string/note_item_head"/>
+            tools:text="@string/note_item_head" />
 
         <TextView
             android:id="@+id/subject_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/body_text_size"
-            tools:text="@string/note_text_body"/>
+            tools:text="@string/note_text_body" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

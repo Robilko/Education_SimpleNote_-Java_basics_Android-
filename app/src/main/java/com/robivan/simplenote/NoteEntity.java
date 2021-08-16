@@ -3,11 +3,9 @@ package com.robivan.simplenote;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.UUID;
 
 public class NoteEntity implements Parcelable {
     private String id;
@@ -58,7 +56,7 @@ public class NoteEntity implements Parcelable {
         }
     };
 
-    public String getId(){
+    public String getId() {
         return id;
     }
 

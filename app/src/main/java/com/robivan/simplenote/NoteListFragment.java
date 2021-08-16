@@ -39,7 +39,7 @@ public class NoteListFragment extends Fragment {
         adapter = new NotesAdapter();
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((item, position) -> getContract().editNote(item, position));
-        data = new NoteSourceFirebaseImpl().init(noteSource ->adapter.notifyDataSetChanged());
+        data = new NoteSourceFirebaseImpl().init(noteSource -> adapter.notifyDataSetChanged());
         adapter.setDataSource(data);
         createNoteButton.setOnClickListener(v -> {
             getContract().createNewNote(data.size());
@@ -66,7 +66,7 @@ public class NoteListFragment extends Fragment {
             data.addNoteData(note);
         }
         //метод init ооповещает обозревателей
-        data.init(noteSource ->adapter.notifyDataSetChanged());
+        data.init(noteSource -> adapter.notifyDataSetChanged());
         //позицианируется на новой позиции
         recyclerView.scrollToPosition(position);
     }
