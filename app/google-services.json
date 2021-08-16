@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "435290744197",
+    "project_id": "simplenote-25583",
+    "storage_bucket": "simplenote-25583.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435290744197:android:8ab527ef7211973ddd90ec",
+        "android_client_info": {
+          "package_name": "com.robivan.simplenote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435290744197-d9hpdlm8tlgqdk7idoqc2e2h6ri5362b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.robivan.simplenote",
+            "certificate_hash": "53ee6392032c61981b4b05d2e9764ba45738dee8"
+          }
+        },
+        {
+          "client_id": "435290744197-nn6gb35d310s72t9gcds0m9eanffqigu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.robivan.simplenote",
+            "certificate_hash": "55d316f626688fe2e45fb575c47e60e641385edd"
+          }
+        },
+        {
+          "client_id": "435290744197-sh4fnl2f1v99ua4f2se3nd0onpjnpckj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhfxn4vS1uS2TIRdwIni-ZID8XAhM3Has"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435290744197-sh4fnl2f1v99ua4f2se3nd0onpjnpckj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

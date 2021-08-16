@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,20 +20,41 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NoteListFragment.Contract, EditNoteFragment.Contract {
+import java.util.Objects;
+
+public class MainActivity extends AppCompatActivity implements NoteListFragment.Contract, EditNoteFragment.Contract, AuthFragment.Controller {
     private static final String NOTES_LIST_FRAGMENT = "NOTES_LIST_FRAGMENT";
     private static final String EDIT_NOTES_FRAGMENT = "EDIT_NOTES_FRAGMENT";
+
+    private Navigation navigation;
     private boolean isTwoPanel = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initDrawer(initToolbar());
+        readSettings();
         isTwoPanel = findViewById(R.id.second_fragment_container) != null;
-        showNoteList();
+        navigation = new Navigation(getSupportFragmentManager());
+        if (User.getNameUser() == null) {
+            navigation.addFragment(R.id.main_fragment_container, AuthFragment.newInstance(), "");
+        } else {
+            initDrawer(initToolbar());
+             showNoteList();
+        }
     }
 
+    @Override
+    public void openMainScreen() {
+        initDrawer(initToolbar());
+        navigation.addFragment(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT);
+    }
+
+    private void readSettings() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Settings.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+    }
+
+    // регистрация drawer
     private void initDrawer(Toolbar toolbar) {
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
@@ -40,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        // Обработка навигационного меню
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -54,14 +77,16 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     private Toolbar initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         return toolbar;
     }
 
     private boolean navigateFragment(int id) {
         switch (id) {
-            case R.id.action_favorite: //TODO реализовать фрагмент с настройками приложения
+            case R.id.action_favorite: //TODO реализовать фрагмент с избранными заметками
             case R.id.action_deleted:  //TODO реализовать фрагмент с удаленными заметками
-            case R.id.action_settings: //TODO реализвать фрагмент с избранными заметками
+            case R.id.action_settings: //TODO реализвать фрагмент с настройками приложения
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.do_not_realised_toast),
                         Toast.LENGTH_SHORT).show();
                 return true;
@@ -106,44 +131,42 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
 
     private void showNoteList() {
         setTitle(NoteListFragment.getTitle());
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT)
-                .commit();
+        navigation.addFragment(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT);
     }
 
-    private void showEditNote() {
-        showEditNote(null);
-    }
-
-    private void showEditNote(@Nullable NoteEntity note) {
+    private void showEditNote(@Nullable NoteEntity note, int position) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (!isTwoPanel) {
             setTitle(EditNoteFragment.getTitle(note == null));
             transaction.addToBackStack(null);
         }
-        transaction.add(isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container, EditNoteFragment.newInstance(note), EDIT_NOTES_FRAGMENT)
-                .commit();
+        transaction.add(
+                isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container,
+                EditNoteFragment.newInstance(note, position),
+                EDIT_NOTES_FRAGMENT
+        ).commit();
     }
 
     @Override
-    public void createNewNote() {
-        showEditNote();
+    public void createNewNote(int position) {
+        NoteEntity newNote = new NoteEntity(null, null, NoteEntity.getCurrentDate());
+        newNote.setId(Integer.toString(position));
+        showEditNote(newNote, position);
     }
 
     @Override
-    public void editNote(NoteEntity noteEntity) {
-        showEditNote(noteEntity);
+    public void editNote(NoteEntity noteEntity, int position) {
+        showEditNote(noteEntity, position);
     }
 
     @Override
-    public void saveNote(NoteEntity note) {
+    public void saveNote(NoteEntity note, int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack();
 
         NoteListFragment noteListFragment = (NoteListFragment) fragmentManager.findFragmentByTag(NOTES_LIST_FRAGMENT);
         if (noteListFragment != null) {
-            noteListFragment.addNote(note);
+            noteListFragment.addOrUpdateNote(note, position);
             setTitle(NoteListFragment.getTitle());
         }
         EditNoteFragment editNoteFragment = (EditNoteFragment) fragmentManager.findFragmentByTag(EDIT_NOTES_FRAGMENT);
