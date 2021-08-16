@@ -6,8 +6,8 @@ import java.util.Map;
 public class NoteMapping {
     public static class Fields {
 
-        public final static String NAME = "name";
-        public final static String DESCRIPTION = "description";
+        public final static String NAME = "title";
+        public final static String DESCRIPTION = "noteText";
         public final static String DATE = "date";
     }
 

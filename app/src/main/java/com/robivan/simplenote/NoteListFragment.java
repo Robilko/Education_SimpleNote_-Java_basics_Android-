@@ -62,7 +62,9 @@ public class NoteListFragment extends Fragment {
     public void addOrUpdateNote(NoteEntity note, int position) {
         if (data.size() != position) {
             data.updateNoteData(note, position);
-        } else data.addNoteData(note);
+        } else {
+            data.addNoteData(note);
+        }
         //метод init ооповещает обозревателей
         data.init(noteSource ->adapter.notifyDataSetChanged());
         //позицианируется на новой позиции

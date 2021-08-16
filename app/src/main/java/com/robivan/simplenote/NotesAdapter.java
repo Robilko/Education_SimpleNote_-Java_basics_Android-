@@ -53,7 +53,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     public class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleTextView, bodyTextView;
         private final CardView cardView;
-        private NoteEntity noteEntity;
+        private NoteEntity note;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,7 +68,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     int id = item.getItemId();
                     switch (id) {
                         case R.id.edit_note_popup:
-                            onItemClickListener.onItemClick(noteEntity, getAdapterPosition());
+                            onItemClickListener.onItemClick(note, getAdapterPosition());
                             return true;
                         case R.id.add_note_to_favorite_popup:  //TODO реализовать добавление заметки в избранное
                         case R.id.delete_popup:                //TODO реализовать удаление заметки
@@ -83,7 +83,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         }
 
         public void bind(NoteSource noteSourceImpl, int position) {
-            NoteEntity note = noteSourceImpl.getNoteData(position);
+            note = noteSourceImpl.getNoteData(position);
             titleTextView.setText(note.getTitle());
             bodyTextView.setText(note.getNoteText());
 

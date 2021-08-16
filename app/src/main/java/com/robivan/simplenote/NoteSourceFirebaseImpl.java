@@ -91,12 +91,7 @@ public class NoteSourceFirebaseImpl implements NoteSource{
     @Override
     public void addNoteData(NoteEntity noteData) {
         // Добавить документ
-        collection.add(noteData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                noteData.setId(documentReference.getId());
-            }
-        });
+        collection.add(noteData).addOnSuccessListener(documentReference -> noteData.setId(documentReference.getId()));
     }
 
     @Override

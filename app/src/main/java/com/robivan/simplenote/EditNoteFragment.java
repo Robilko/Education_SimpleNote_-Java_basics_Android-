@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,12 +15,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.util.Date;
-
 public class EditNoteFragment extends Fragment {
 
     private static final String NOTE_EXTRA_KEY = "NOTE_EXTRA_KEY";
-    private static final String POSITION_EXTRA_KEY = "NOTE_EXTRA_KEY";
+    private static final String POSITION_EXTRA_KEY = "POSITION_EXTRA_KEY";
 
     private MaterialButton saveButton;
     private EditText noteHeading, noteTextBody;
@@ -50,6 +49,19 @@ public class EditNoteFragment extends Fragment {
         noteHeading = view.findViewById(R.id.note_heading);
         noteTextBody = view.findViewById(R.id.note_text_body);
         noteDateCreate = view.findViewById(R.id.note_date);
+        noteHeading.requestFocus();
+        hideKeyboardAfterRefocusing(noteHeading);
+        hideKeyboardAfterRefocusing(noteTextBody);
+    }
+
+    private void hideKeyboardAfterRefocusing(EditText editText) {
+        editText.setOnFocusChangeListener((view1, focused) -> {
+            InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (focused)
+                keyboard.showSoftInput(editText, 0);
+            else
+                keyboard.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        });
     }
 
     @Override
@@ -73,11 +85,6 @@ public class EditNoteFragment extends Fragment {
             note.setDate(date);
             return note;
         } else return new NoteEntity(name,description,date);
-//        return new NoteEntity(
-//                noteHeading.getText().toString(),
-//                noteTextBody.getText().toString(),
-//                note == null ? NoteEntity.getCurrentDate() : note.getDate()
-//        );
     }
 
     private void fillNote(NoteEntity note) {
