@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -28,9 +29,9 @@ public class AuthFragment extends Fragment {
 
     private GoogleSignInClient googleSignInClient;
     // Кнопка регистрации через Google
-    private com.google.android.gms.common.SignInButton buttonSignIn;
+    private SignInButton buttonSignIn;
     private TextView emailView;
-    private MaterialButton continue_btn;
+    private MaterialButton continueBtn;
     private GoogleSignInAccount account;
 
     public static AuthFragment newInstance() {
@@ -68,14 +69,13 @@ public class AuthFragment extends Fragment {
     private void initView(View view) {
         // Кнопка регистрации пользователя
         buttonSignIn = view.findViewById(R.id.sign_in_button);
-        buttonSignIn.setOnClickListener(v -> signIn()
-        );
+        buttonSignIn.setOnClickListener(v -> signIn());
 
         emailView = view.findViewById(R.id.email);
 
         // Кнопка «Продолжить», будем показывать главный фрагмент
-        continue_btn = view.findViewById(R.id.continue_btn);
-        continue_btn.setOnClickListener(v -> ((Controller) requireActivity()).openMainScreen());
+        continueBtn = view.findViewById(R.id.continue_btn);
+        continueBtn.setOnClickListener(v -> ((Controller) requireActivity()).openMainScreen());
     }
 
     @Override
@@ -140,12 +140,12 @@ public class AuthFragment extends Fragment {
     // Разрешить аутентификацию и запретить остальные действия
     private void enableSign() {
         buttonSignIn.setEnabled(true);
-        continue_btn.setEnabled(false);
+        continueBtn.setEnabled(false);
     }
 
     // Запретить аутентификацию (уже прошла) и разрешить остальные действия
     private void disableSign() {
         buttonSignIn.setEnabled(false);
-        continue_btn.setEnabled(true);
+        continueBtn.setEnabled(true);
     }
 }

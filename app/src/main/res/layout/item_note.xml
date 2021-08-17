@@ -20,6 +20,7 @@
             android:id="@+id/subject_title_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:textStyle="bold"
             android:textSize="@dimen/heading_text_size"
             tools:text="@string/note_item_head" />
@@ -28,6 +29,7 @@
             android:id="@+id/subject_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="4"
             android:textSize="@dimen/body_text_size"
             tools:text="@string/note_text_body" />
     </LinearLayout>

@@ -73,25 +73,26 @@ public class NoteSourceFirebaseImpl implements NoteSource {
     }
 
     @Override
-    public void updateNoteData(NoteEntity noteData, int position) {
-        String id = noteData.getId();
+    public void updateNoteData(NoteEntity note, int position) {
+        String id = note.getId();
         if (id != null) {
             // Изменить документ по идентификатору
-            collection.document(id).set(noteData);
+            collection.document(id).set(note);
+            notesData.set(position, note);
         }
     }
 
     @Override
-    public void addNoteData(NoteEntity noteData) {
+    public void addNoteData(NoteEntity note) {
         // Добавить документ
-        collection.add(noteData).addOnSuccessListener(documentReference -> noteData.setId(documentReference.getId()));
+        collection.add(note).addOnSuccessListener(documentReference -> note.setId(documentReference.getId()));
+        notesData.add(note);
     }
 
     @Override
     public void clearNoteData() {
-        for (NoteEntity noteData : notesData) {
-            collection.document(noteData.getId()).delete()
-                    .addOnSuccessListener(command -> notesData.clear());
+        for (NoteEntity note : notesData) {
+            collection.document(note.getId()).delete().addOnSuccessListener(command -> notesData.clear());
         }
     }
 }
