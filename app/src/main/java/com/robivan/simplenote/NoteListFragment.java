@@ -5,18 +5,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 
 public class NoteListFragment extends Fragment {
     private MaterialButton createNoteButton;
     private RecyclerView recyclerView;
-    private  NotesAdapter adapter;
+    private NotesAdapter adapter;
 
     private final ArrayList<NoteEntity> noteList = new ArrayList<>();
 
@@ -24,7 +27,7 @@ public class NoteListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
         createNoteButton = view.findViewById(R.id.create_new_note);
-        recyclerView = view.findViewById(R.id.recycle_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         return view;
     }
 
@@ -58,18 +61,23 @@ public class NoteListFragment extends Fragment {
 
     @Nullable
     private NoteEntity findNoteById(String id) {
-        for(NoteEntity note : noteList) {
+        for (NoteEntity note : noteList) {
             if (note.id.equals(id)) return note;
         }
         return null;
     }
 
-    private Contract getContract() {
-        return (Contract)getActivity();
+    public static int getTitle() {
+        return R.string.notes_list_title;
     }
 
-    interface Contract{
+    private Contract getContract() {
+        return (Contract) getActivity();
+    }
+
+    interface Contract {
         void createNewNote();
+
         void editNote(NoteEntity noteEntity);
     }
 }
