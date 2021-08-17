@@ -116,12 +116,13 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
         showEditNote(null);
     }
 
-    private void showEditNote(@Nullable NoteEntity noteEntity) {
+    private void showEditNote(@Nullable NoteEntity note) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (!isTwoPanel) {
+            setTitle(note == null ? R.string.create_note_title : R.string.edit_note_title);
             transaction.addToBackStack(null);
         }
-        transaction.add(isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container, EditNoteFragment.newInstance(noteEntity), EDIT_NOTES_FRAGMENT)
+        transaction.add(isTwoPanel ? R.id.second_fragment_container : R.id.main_fragment_container, EditNoteFragment.newInstance(note), EDIT_NOTES_FRAGMENT)
         .commit();
     }
 
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
 
     @Override
     public void saveNote(NoteEntity note) {
+        setTitle(R.string.app_name);
         getSupportFragmentManager().popBackStack();
         NoteListFragment noteListFragment = (NoteListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT);
         if (noteListFragment != null) {

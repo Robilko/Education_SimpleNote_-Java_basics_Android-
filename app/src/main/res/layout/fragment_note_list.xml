@@ -5,8 +5,8 @@
     android:background="@color/design_default_color_background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/list_layout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view"
         android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="0dp"

@@ -7,4 +7,6 @@
     <dimen name="body_text_size">20sp</dimen>
     <dimen name="nav_header_height">200dp</dimen>
     <dimen name="nav_header_dimen">42sp</dimen>
+    <dimen name="note_card_radius">16dp</dimen>
+    <dimen name="note_card_elevation">10dp</dimen>
 </resources>
