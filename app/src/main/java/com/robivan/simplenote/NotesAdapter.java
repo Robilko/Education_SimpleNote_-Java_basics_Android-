@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     private NoteSource dataSource;
+    public final int CMD_UPDATE = 0;
+    public final int CMD_DELETE = 1;
     private OnItemClickListener onItemClickListener; // Слушатель будет устанавливаться извне
 
     public NotesAdapter() {
@@ -26,7 +28,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
     interface OnItemClickListener {
-        void onItemClick(NoteEntity noteEntity, int position);
+        void onItemClick(NoteEntity noteEntity, int position, int popupId);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -67,12 +69,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     int id = item.getItemId();
                     switch (id) {
                         case R.id.edit_note_popup:
-                            onItemClickListener.onItemClick(note, getAdapterPosition());
+                            onItemClickListener.onItemClick(note, getAdapterPosition(), CMD_UPDATE);
                             return true;
                         case R.id.add_note_to_favorite_popup:  //TODO реализовать добавление заметки в избранное
-                        case R.id.delete_popup:                //TODO реализовать удаление заметки
                             Toast.makeText(v.getContext(), v.getResources().getString(R.string.do_not_realised_toast),
                                     Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.delete_popup:
+                            onItemClickListener.onItemClick(note, getAdapterPosition(), CMD_DELETE);
                             return true;
                     }
                     return true;

@@ -1,6 +1,7 @@
 package com.robivan.simplenote;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.button.MaterialButton;
+
+import java.util.Objects;
 
 public class NoteListFragment extends Fragment {
 
@@ -31,13 +36,41 @@ public class NoteListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initView(view);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        } else {
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        }
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new NotesAdapter();
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener((item, position) -> getContract().editNote(item, position));
+        adapter.setOnItemClickListener((item, position, popupId) -> {
+            if (popupId == adapter.CMD_UPDATE) {
+                getContract().editNote(item, position);
+            } else if (popupId == adapter.CMD_DELETE) {
+                deleteNoteAndShowDialog(position);
+            }
+
+        });
         data = new NoteSourceFirebaseImpl().init(noteSource -> adapter.notifyDataSetChanged());
         adapter.setDataSource(data);
         createNoteButton.setOnClickListener(v -> getContract().createNewNote(data.size()));
+    }
+
+    private void deleteNoteAndShowDialog(int position) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.alert_title_delete_note)
+                .setMessage(R.string.alert_message_delete_note)
+                .setCancelable(false)
+                .setPositiveButton(R.string.positive_button, (d, i) -> {
+                    data.deleteNoteData(position);
+                    adapter.notifyDataSetChanged();
+                })
+                .setNegativeButton(R.string.negative_button, (d, i) -> {
+                })
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .show();
     }
 
     private void initView(View view) {
