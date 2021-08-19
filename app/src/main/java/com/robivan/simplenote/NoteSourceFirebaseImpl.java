@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class NoteSourceFirebaseImpl implements NoteSource {
 
-    private static final String NOTES_COLLECTION = "notes";
+    private static final String NOTES_COLLECTION = User.getEmailUser();
     private static final String TAG = "NoteSourceFirebaseImpl";
 
     // База данных Firestore
