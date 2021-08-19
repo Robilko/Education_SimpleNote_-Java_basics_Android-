@@ -33,6 +33,7 @@
     <string name="negative_button">No</string>
     <string name="on_back_pressed_exit">Press once again to exit!</string>
     <string name="some_date" translatable="false">12.08.2021, 11:01</string>
+    <string name="change_layout_menu_title">Change layout</string>
 
 
 </resources>

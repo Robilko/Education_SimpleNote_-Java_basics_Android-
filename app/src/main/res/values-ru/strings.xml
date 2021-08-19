@@ -32,6 +32,7 @@
     <string name="positive_button">Да</string>
     <string name="negative_button">Нет</string>
     <string name="on_back_pressed_exit">Нажмите еще раз для выхода!</string>
+    <string name="change_layout_menu_title">Сменить макет</string>
 
 
 </resources>

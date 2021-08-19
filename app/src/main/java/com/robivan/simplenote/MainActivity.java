@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     private static final String NOTES_LIST_FRAGMENT = "NOTES_LIST_FRAGMENT";
     private static final String EDIT_NOTES_FRAGMENT = "EDIT_NOTES_FRAGMENT";
     private static long backPressed;
-
     private Navigation navigation;
 
     @Override
