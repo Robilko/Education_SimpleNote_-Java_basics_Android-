@@ -53,7 +53,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
-        private final TextView titleTextView, bodyTextView;
+        private final TextView titleTextView, bodyTextView, dateTextView;
         private NoteEntity note;
 
         public NoteViewHolder(@NonNull View itemView) {
@@ -61,6 +61,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             CardView cardView = (CardView) itemView;
             titleTextView = itemView.findViewById(R.id.subject_title_view);
             bodyTextView = itemView.findViewById(R.id.subject_text_view);
+            dateTextView = itemView.findViewById(R.id.subject_date_view);
 
             cardView.setOnClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
@@ -89,6 +90,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             note = noteSourceImpl.getNoteData(position);
             titleTextView.setText(note.getTitle());
             bodyTextView.setText(note.getNoteText());
+            dateTextView.setText(note.getCreateDate());
 
         }
     }

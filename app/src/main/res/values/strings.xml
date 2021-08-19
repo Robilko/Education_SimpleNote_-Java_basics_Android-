@@ -3,7 +3,7 @@
     <string name="create_new_note">New note</string>
     <string name="note_item_head">Heading</string>
     <string name="note_text_body">Add text note</string>
-    <string name="note_item_date">Date of create: \u0020</string>
+    <string name="note_item_date">Last modified: \u0020</string>
     <string name="save_btn_name">Save</string>
     <string name="create_note_title">New note</string>
     <string name="edit_note_title">Edit note</string>
@@ -32,6 +32,7 @@
     <string name="positive_button">Yes</string>
     <string name="negative_button">No</string>
     <string name="on_back_pressed_exit">Press once again to exit!</string>
+    <string name="some_date" translatable="false">12.08.2021, 11:01</string>
 
 
 </resources>

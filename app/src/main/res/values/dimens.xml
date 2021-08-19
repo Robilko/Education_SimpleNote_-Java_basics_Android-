@@ -10,4 +10,5 @@
     <dimen name="note_card_radius">16dp</dimen>
     <dimen name="note_card_elevation">10dp</dimen>
     <dimen name="half_default_margin">2dp</dimen>
+    <dimen name="date_text_size">10sp</dimen>
 </resources>

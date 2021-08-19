@@ -173,8 +173,9 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
                 Toast.makeText(getBaseContext(), R.string.on_back_pressed_exit, Toast.LENGTH_SHORT).show();
             }
             backPressed = System.currentTimeMillis();
-        } else if (fragment instanceof EditNoteFragment) {
-            showNoteList();
+        } else {
+            super.onBackPressed();
+            setToolBarTitle();
         }
     }
 

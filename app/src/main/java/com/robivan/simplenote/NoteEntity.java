@@ -18,7 +18,7 @@ public class NoteEntity implements Parcelable {
         this.title = title;
         this.noteText = noteText;
         this.date = date;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("d-MM-y", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("d.MM.y, HH:mm", Locale.getDefault());
         createDate = dateFormat.format(date);
     }
 
