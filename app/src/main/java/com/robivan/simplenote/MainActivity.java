@@ -22,7 +22,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements NoteListFragment.Contract, EditNoteFragment.Contract, AuthFragment.Controller {
     private static final String NOTES_LIST_FRAGMENT = "NOTES_LIST_FRAGMENT";
     private static final String EDIT_NOTES_FRAGMENT = "EDIT_NOTES_FRAGMENT";
-    public static final String SHARED_PREFERENCE_NAME = "FragmentNavigation";
     private static long backPressed;
 
     private Navigation navigation;
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        readSettings();
         navigation = new Navigation(getSupportFragmentManager());
         if (User.getNameUser() == null) {
             navigation.addFragment(R.id.main_fragment_container, AuthFragment.newInstance(), "");
@@ -48,10 +46,6 @@ public class MainActivity extends AppCompatActivity implements NoteListFragment.
     public void openMainScreen() {
         initDrawer(initToolbar());
         navigation.addFragment(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT);
-    }
-
-    private void readSettings() {
-        getSharedPreferences(SHARED_PREFERENCE_NAME, MODE_PRIVATE);
     }
 
     // регистрация drawer
