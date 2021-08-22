@@ -97,7 +97,7 @@ public class NoteListFragment extends Fragment {
                 .setCancelable(false)
                 .setPositiveButton(R.string.positive_button, (d, i) -> {
                     data.deleteNoteData(position);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRemoved(position);
                 })
                 .setNegativeButton(R.string.negative_button, (d, i) -> {
                 })
@@ -141,7 +141,7 @@ public class NoteListFragment extends Fragment {
         //метод init ооповещает обозревателей
         data.init(noteSource -> adapter.notifyDataSetChanged());
         //позицианируется на новой позиции
-        recyclerView.scrollToPosition(position);
+        recyclerView.smoothScrollToPosition(position);
     }
 
     public static int getTitle() {
