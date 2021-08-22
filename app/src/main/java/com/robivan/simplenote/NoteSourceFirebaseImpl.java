@@ -7,7 +7,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +77,7 @@ public class NoteSourceFirebaseImpl implements NoteSource {
         String id = note.getId();
         if (id != null) {
             // Изменить документ по идентификатору
-            collection.document(id).set(note);
+            collection.document(notesData.get(position).getId()).set(NoteMapping.toDocument(note));
             notesData.set(position, note);
         }
     }
@@ -86,14 +85,16 @@ public class NoteSourceFirebaseImpl implements NoteSource {
     @Override
     public void addNoteData(NoteEntity note) {
         // Добавить документ
-        collection.add(note).addOnSuccessListener(documentReference -> note.setId(documentReference.getId()));
+        collection.add(NoteMapping.toDocument(note))
+                .addOnSuccessListener(documentReference -> note.setId(documentReference.getId()));
         notesData.add(note);
     }
 
     @Override
     public void clearNoteData() {
         for (NoteEntity note : notesData) {
-            collection.document(note.getId()).delete().addOnSuccessListener(command -> notesData.clear());
+            collection.document(note.getId()).delete();
         }
+        notesData.clear();
     }
 }
