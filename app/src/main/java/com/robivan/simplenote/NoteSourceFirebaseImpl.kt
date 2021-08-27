@@ -1,100 +1,88 @@
-package com.robivan.simplenote;
+package com.robivan.simplenote
 
-import android.util.Log;
+import android.util.Log
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.*
+import java.lang.Exception
+import java.util.*
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-public class NoteSourceFirebaseImpl implements NoteSource {
-
-    private static final String NOTES_COLLECTION = User.getEmailUser();
-    private static final String TAG = "NoteSourceFirebaseImpl";
-
+class NoteSourceFirebaseImpl : NoteSource {
     // База данных Firestore
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private var db = FirebaseFirestore.getInstance()
 
     // Коллекция документов
-    private final CollectionReference collection = db.collection(NOTES_COLLECTION);
+    private val collection = db.collection(NOTES_COLLECTION!!)
 
     // Загружаемый список карточек
-    private List<NoteEntity> notesData = new ArrayList<>();
-
-    public NoteSourceFirebaseImpl() {
-    }
-
-    @Override
-    public NoteSource init(NoteSourceResponse noteSourceResponse) {
+    private var notesData: MutableList<NoteEntity?>? = ArrayList()
+    override fun init(noteSourceResponse: (NoteSource) -> Unit): NoteSource {
         // Получить всю коллекцию, отсортированную по полю «Дата»
         // При удачном считывании данных загрузим список карточек
         collection.orderBy(NoteMapping.Fields.DATE, Query.Direction.DESCENDING).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        notesData = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                            Map<String, Object> doc = document.getData();
-                            String id = document.getId();
-                            NoteEntity noteData = NoteMapping.toNoteData(id, doc);
-                            notesData.add(noteData);
-                        }
-                        Log.d(TAG, "success " + notesData.size() + " qnt");
-                        noteSourceResponse.initialized(NoteSourceFirebaseImpl.this);
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
+            .addOnCompleteListener { task: Task<QuerySnapshot?> ->
+                if (task.isSuccessful) {
+                    notesData = ArrayList()
+                    for (document in Objects.requireNonNull(task.result)!!) {
+                        val doc = document.data
+                        val id = document.id
+                        val noteData = NoteMapping.toNoteData(id, doc)
+                        (notesData as ArrayList<NoteEntity?>).add(noteData)
                     }
-                }).addOnFailureListener(e -> Log.d(TAG, "get failed with ", e));
-        return this;
+                    Log.d(TAG, "success " + (notesData as ArrayList<NoteEntity?>).size + " qnt")
+                    noteSourceResponse.initialized(this@NoteSourceFirebaseImpl)
+                } else {
+                    Log.d(TAG, "get failed with ", task.exception)
+                }
+            }.addOnFailureListener { e: Exception? -> Log.d(TAG, "get failed with ", e) }
+        return this
     }
 
-    @Override
-    public NoteEntity getNoteData(int position) {
-        return notesData.get(position);
+    override fun getNoteData(position: Int): NoteEntity? {
+        return notesData?.get(position)
     }
 
-    @Override
-    public int size() {
-        return notesData == null ? 0 : notesData.size();
+    override fun size(): Int {
+        return if (notesData == null) 0 else notesData!!.size
     }
 
-    @Override
-    public void deleteNoteData(int position) {
+    override fun deleteNoteData(position: Int) {
         // Удалить документ с определённым идентификатором
-        String id = notesData.get(position).getId();
+        val id = notesData!![position]?.id
         if (id != null) {
-            collection.document(id).delete();
-            notesData.remove(position);
+            collection.document(id).delete()
+            notesData!!.removeAt(position)
         }
     }
 
-    @Override
-    public void updateNoteData(NoteEntity note, int position) {
-        String id = note.getId();
+    override fun updateNoteData(noteData: NoteEntity, position: Int) {
+        val id = noteData.id
         if (id != null) {
             // Изменить документ по идентификатору
-            collection.document(notesData.get(position).getId()).set(NoteMapping.toDocument(note));
-            notesData.set(position, note);
+            notesData!![position]?.id?.let { collection.document(it).set(NoteMapping.toDocument(noteData)) }
+            notesData!![position] = noteData
         }
     }
 
-    @Override
-    public void addNoteData(NoteEntity note) {
+    override fun addNoteData(noteData: NoteEntity) {
         // Добавить документ
-        collection.add(NoteMapping.toDocument(note))
-                .addOnSuccessListener(documentReference -> note.setId(documentReference.getId()));
-        notesData.add(note);
+        collection.add(NoteMapping.toDocument(noteData))
+            .addOnSuccessListener { documentReference: DocumentReference ->
+                noteData.id = documentReference.id
+            }
+        notesData!!.add(noteData)
     }
 
-    @Override
-    public void clearNoteData() {
-        for (NoteEntity note : notesData) {
-            collection.document(note.getId()).delete();
+    override fun clearNoteData() {
+        for (note in notesData!!) {
+            if (note != null) {
+                note.id?.let { collection.document(it).delete() }
+            }
         }
-        notesData.clear();
+        notesData!!.clear()
+    }
+
+    companion object {
+        private val NOTES_COLLECTION = User.emailUser
+        private const val TAG = "NoteSourceFirebaseImpl"
     }
 }

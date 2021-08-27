@@ -1,98 +1,92 @@
-package com.robivan.simplenote;
+package com.robivan.simplenote
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
+import com.robivan.simplenote.NotesAdapter.NoteViewHolder
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
+class NotesAdapter : RecyclerView.Adapter<NoteViewHolder>() {
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
-    private NoteSource dataSource;
-    public final int CMD_UPDATE = 0;
-    public final int CMD_DELETE = 1;
-    private OnItemClickListener onItemClickListener; // Слушатель будет устанавливаться извне
+    private var dataSource: NoteSource? = null
+    val CMD_UPDATE = 0
+    val CMD_DELETE = 1
 
-    public NotesAdapter() {
-    }
+    // Слушатель будет устанавливаться извне
+    private lateinit var onItemClickListener: OnItemClickListener
 
     // Передаём в конструктор источник данных
     // В нашем случае это массив, но может быть и запрос к БД
-    public void setDataSource(NoteSource dataSource) {
-        this.dataSource = dataSource;
-        notifyDataSetChanged();
+    fun setDataSource(dataSource: NoteSource?) {
+        this.dataSource = dataSource
+        notifyDataSetChanged()
     }
 
     interface OnItemClickListener {
-        void onItemClick(NoteEntity noteEntity, int position, int popupId);
+        fun onItemClick(noteEntity: NoteEntity?, position: Int, popupId: Int)
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
     }
 
-    @NonNull
-    @Override
-    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false);
-        return new NoteViewHolder(view);
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
+        return NoteViewHolder(view)
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull NoteViewHolder viewHolder, int position) {
-        viewHolder.bind(dataSource, position);
+    override fun onBindViewHolder(viewHolder: NoteViewHolder, position: Int) {
+        viewHolder.bind(dataSource, position)
     }
 
-    @Override
-    public int getItemCount() {
-        return dataSource.size();
+    override fun getItemCount(): Int {
+        return dataSource!!.size()
     }
 
-    public class NoteViewHolder extends RecyclerView.ViewHolder {
-        private final TextView titleTextView, bodyTextView, dateTextView;
-        private NoteEntity note;
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val titleTextView: TextView
+        private val bodyTextView: TextView
+        private val dateTextView: TextView
+        private var note: NoteEntity? = null
+        fun bind(noteSourceImpl: NoteSource?, position: Int) {
+            note = noteSourceImpl!!.getNoteData(position)
+            titleTextView.text = note!!.title
+            bodyTextView.text = note!!.noteText
+            dateTextView.text = note!!.createDate
+        }
 
-        public NoteViewHolder(@NonNull View itemView) {
-            super(itemView);
-            CardView cardView = (CardView) itemView;
-            titleTextView = itemView.findViewById(R.id.subject_title_view);
-            bodyTextView = itemView.findViewById(R.id.subject_text_view);
-            dateTextView = itemView.findViewById(R.id.subject_date_view);
-
-            cardView.setOnClickListener(v -> {
-                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-                popupMenu.inflate(R.menu.popup_menu);
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    int id = item.getItemId();
-                    switch (id) {
-                        case R.id.edit_note_popup:
-                            onItemClickListener.onItemClick(note, getAdapterPosition(), CMD_UPDATE);
-                            return true;
-                        case R.id.add_note_to_favorite_popup:  //TODO реализовать добавление заметки в избранное
-                            Toast.makeText(v.getContext(), v.getResources().getString(R.string.do_not_realised_toast),
-                                    Toast.LENGTH_SHORT).show();
-                            return true;
-                        case R.id.delete_popup:
-                            onItemClickListener.onItemClick(note, getAdapterPosition(), CMD_DELETE);
-                            return true;
+        init {
+            val cardView = itemView as CardView
+            titleTextView = itemView.findViewById(R.id.subject_title_view)
+            bodyTextView = itemView.findViewById(R.id.subject_text_view)
+            dateTextView = itemView.findViewById(R.id.subject_date_view)
+            cardView.setOnClickListener { v: View ->
+                val popupMenu = PopupMenu(v.context, v)
+                popupMenu.inflate(R.menu.popup_menu)
+                popupMenu.setOnMenuItemClickListener { item: MenuItem ->
+                    when (item.itemId) {
+                        R.id.edit_note_popup -> {
+                            onItemClickListener.onItemClick(note, adapterPosition, CMD_UPDATE)
+                            return@setOnMenuItemClickListener true
+                        }
+                        R.id.add_note_to_favorite_popup -> {
+                            Toast.makeText(
+                                v.context, v.resources.getString(R.string.do_not_realised_toast),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@setOnMenuItemClickListener true
+                        }
+                        R.id.delete_popup -> {
+                            onItemClickListener.onItemClick(note, adapterPosition, CMD_DELETE)
+                            return@setOnMenuItemClickListener true
+                        }
                     }
-                    return true;
-                });
-                popupMenu.show();
-            });
-        }
-
-        public void bind(NoteSource noteSourceImpl, int position) {
-            note = noteSourceImpl.getNoteData(position);
-            titleTextView.setText(note.getTitle());
-            bodyTextView.setText(note.getNoteText());
-            dateTextView.setText(note.getCreateDate());
-
+                    true
+                }
+                popupMenu.show()
+            }
         }
     }
-
 }

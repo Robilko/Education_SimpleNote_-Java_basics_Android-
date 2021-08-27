@@ -1,6 +1,6 @@
-package com.robivan.simplenote;
+package com.robivan.simplenote
 
-public interface NoteSourceResponse {
+interface NoteSourceResponse {
     // Метод initialized() будет вызываться, когда данные проинициализируются и будут готовы.
-    void initialized(NoteSource NotesData);
+    fun initialized(NotesData: NoteSource)
 }

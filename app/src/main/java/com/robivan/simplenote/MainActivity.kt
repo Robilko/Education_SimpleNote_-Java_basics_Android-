@@ -1,183 +1,202 @@
-package com.robivan.simplenote;
+package com.robivan.simplenote
 
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.SearchView;
-import android.widget.Toast;
+import android.os.Bundle
+import android.view.*
+import android.widget.SearchView
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+class MainActivity : AppCompatActivity(), NoteListFragment.Contract, EditNoteFragment.Contract,
+    AuthFragment.Controller {
 
-import com.google.android.material.navigation.NavigationView;
+    companion object {
+        private const val NOTES_LIST_FRAGMENT = "NOTES_LIST_FRAGMENT"
+        private const val EDIT_NOTES_FRAGMENT = "EDIT_NOTES_FRAGMENT"
+        private var backPressed: Long = 0
+    }
 
-import java.util.Objects;
+    private lateinit var navigation: Navigation
 
-public class MainActivity extends AppCompatActivity implements NoteListFragment.Contract, EditNoteFragment.Contract, AuthFragment.Controller {
-    private static final String NOTES_LIST_FRAGMENT = "NOTES_LIST_FRAGMENT";
-    private static final String EDIT_NOTES_FRAGMENT = "EDIT_NOTES_FRAGMENT";
-    private static long backPressed;
-    private Navigation navigation;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        navigation = new Navigation(getSupportFragmentManager());
-        if (User.getNameUser() == null) {
-            navigation.addFragment(R.id.main_fragment_container, AuthFragment.newInstance(), "");
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        navigation = Navigation(supportFragmentManager)
+        if (User.nameUser == null) {
+            navigation.addFragment(
+                R.id.main_fragment_container,
+                AuthFragment.newInstance(),
+                ""
+            )
         } else {
-            initDrawer(initToolbar());
+            initDrawer(initToolbar())
             if (savedInstanceState == null) {
-                showNoteList();
+                showNoteList()
             }
-            setToolBarTitle();
+            setToolBarTitle()
         }
     }
 
-    @Override
-    public void openMainScreen() {
-        initDrawer(initToolbar());
-        navigation.addFragment(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT);
+    override fun openMainScreen() {
+        initDrawer(initToolbar())
+        navigation.addFragment(
+            R.id.main_fragment_container,
+            NoteListFragment(),
+            NOTES_LIST_FRAGMENT
+        )
     }
 
     // регистрация drawer
-    private void initDrawer(Toolbar toolbar) {
-        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+    private fun initDrawer(toolbar: Toolbar) {
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
 
         // Обработка навигационного меню
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener { item: MenuItem ->
+            val id = item.itemId
             if (navigateFragment(id)) {
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
+                drawer.closeDrawer(GravityCompat.START)
+                return@setNavigationItemSelectedListener true
             }
-            return false;
-        });
-    }
-
-    private Toolbar initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        return toolbar;
-    }
-
-    private boolean navigateFragment(int id) {
-        switch (id) {
-            case R.id.action_favorite: //TODO реализовать фрагмент с избранными заметками
-            case R.id.action_deleted:  //TODO реализовать фрагмент с удаленными заметками
-            case R.id.action_settings: //TODO реализвать фрагмент с настройками приложения
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.do_not_realised_toast),
-                        Toast.LENGTH_SHORT).show();
-                return true;
+            false
         }
-        return false;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem search = menu.findItem(R.id.search_menu);
-        SearchView searchText = (SearchView) search.getActionView();
-        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.do_not_realised_toast),
-                        Toast.LENGTH_SHORT).show();
-                return true; //TODO
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true; //TODO
-            }
-        });
-        return true;
+    private fun initToolbar(): Toolbar {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        Objects.requireNonNull(supportActionBar!!).setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeButtonEnabled(true)
+        return toolbar
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.search_menu: //TODO реализовать поиск в заметках
-                Toast.makeText(this, getResources().getString(R.string.do_not_realised_toast), Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.about_app_menu:
-                Toast.makeText(this, getResources().getString(R.string.about_app_toast), Toast.LENGTH_LONG).show();
-                return true;
+    private fun navigateFragment(id: Int): Boolean {
+        when (id) {
+            R.id.action_favorite, R.id.action_deleted, R.id.action_settings -> {
+                Toast.makeText(
+                    this@MainActivity, resources.getString(R.string.do_not_realised_toast),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return true
+            }
         }
-        return super.onOptionsItemSelected(item);
+        return false
     }
 
-    private void showNoteList() {
-        setToolBarTitle();
-        navigation.addFragment(R.id.main_fragment_container, new NoteListFragment(), NOTES_LIST_FRAGMENT);
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        val search = menu.findItem(R.id.search_menu)
+        val searchText = search.actionView as SearchView
+        searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Toast.makeText(
+                    this@MainActivity, resources.getString(R.string.do_not_realised_toast),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return true //TODO
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return true //TODO
+            }
+        })
+        return true
     }
 
-    private void showEditNote(@Nullable NoteEntity note, int position) {
-        setTitle(EditNoteFragment.getTitle(note == null));
-        navigation.addFragment(R.id.main_fragment_container, EditNoteFragment.newInstance(note, position), EDIT_NOTES_FRAGMENT);
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.search_menu -> {
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.do_not_realised_toast),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return true
+            }
+            R.id.about_app_menu -> {
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.about_app_toast),
+                    Toast.LENGTH_LONG
+                ).show()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
-    @Override
-    public void createNewNote(int position) {
-        NoteEntity newNote = new NoteEntity(null, null, NoteEntity.getCurrentDate());
-        newNote.setId(Integer.toString(position));
-        showEditNote(newNote, position);
+    private fun showNoteList() {
+        setToolBarTitle()
+        navigation.addFragment(
+            R.id.main_fragment_container,
+            NoteListFragment(),
+            NOTES_LIST_FRAGMENT
+        )
     }
 
-    @Override
-    public void editNote(NoteEntity noteEntity, int position) {
-        showEditNote(noteEntity, position);
+    private fun showEditNote(note: NoteEntity?, position: Int) {
+        setTitle(EditNoteFragment.getTitle(note == null))
+        navigation.addFragment(
+            R.id.main_fragment_container,
+            EditNoteFragment.newInstance(note, position),
+            EDIT_NOTES_FRAGMENT
+        )
     }
 
-    @Override
-    public void saveNote(NoteEntity note, int position) {
-        getSupportFragmentManager().popBackStack();
+    override fun createNewNote(position: Int) {
+        val newNote = NoteEntity(null, null, NoteEntity.currentDate)
+        newNote.id = position.toString()
+        showEditNote(newNote, position)
+    }
 
-        NoteListFragment noteListFragment = (NoteListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT);
+    override fun editNote(noteEntity: NoteEntity?, position: Int) {
+        showEditNote(noteEntity, position)
+    }
+
+    override fun saveNote(note: NoteEntity, position: Int) {
+        supportFragmentManager.popBackStack()
+        val noteListFragment =
+            supportFragmentManager.findFragmentByTag(NOTES_LIST_FRAGMENT) as NoteListFragment?
         if (noteListFragment != null) {
-            noteListFragment.addOrUpdateNote(note, position);
-            setTitle(NoteListFragment.getTitle());
+            noteListFragment.addOrUpdateNote(note, position)
+            setTitle(NoteListFragment.title)
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
-        if (fragment instanceof NoteListFragment) {
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container)
+        if (fragment is NoteListFragment) {
             if (backPressed + 2000 > System.currentTimeMillis()) {
-                super.onBackPressed();
-                finish();
+                super.onBackPressed()
+                finish()
             } else {
-                Toast.makeText(getBaseContext(), R.string.on_back_pressed_exit, Toast.LENGTH_SHORT).show();
+                Toast.makeText(baseContext, R.string.on_back_pressed_exit, Toast.LENGTH_SHORT)
+                    .show()
             }
-            backPressed = System.currentTimeMillis();
+            backPressed = System.currentTimeMillis()
         } else {
-            super.onBackPressed();
-            setToolBarTitle();
+            super.onBackPressed()
+            setToolBarTitle()
         }
     }
 
-    private void setToolBarTitle() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
-        if (fragment instanceof EditNoteFragment) {
-            setTitle(EditNoteFragment.getTitle(false));
-        } else if (fragment instanceof NoteListFragment) {
-            setTitle(NoteListFragment.getTitle());
+    private fun setToolBarTitle() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.main_fragment_container)
+        if (fragment is EditNoteFragment) {
+            setTitle(EditNoteFragment.getTitle(false))
+        } else if (fragment is NoteListFragment) {
+            setTitle(NoteListFragment.title)
         }
     }
 }

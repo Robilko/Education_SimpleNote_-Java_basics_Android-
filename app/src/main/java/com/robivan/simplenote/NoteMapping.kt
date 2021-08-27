@@ -1,31 +1,29 @@
-package com.robivan.simplenote;
+package com.robivan.simplenote
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*
 
-public class NoteMapping {
-
-    public static class Fields {
-
-        public final static String TITLE = "title";
-        public final static String NOTE_TEXT = "noteText";
-        public final static String DATE = "date";
+object NoteMapping {
+    fun toNoteData(id: String?, doc: Map<String?, Any?>): NoteEntity {
+        val answer = NoteEntity(
+            doc[Fields.TITLE] as String?,
+            doc[Fields.NOTE_TEXT] as String?,
+            doc[Fields.DATE] as Long
+        )
+        answer.id = id
+        return answer
     }
 
-    public static NoteEntity toNoteData(String id, Map<String, Object> doc) {
-        NoteEntity answer = new NoteEntity(
-                (String) doc.get(Fields.TITLE),
-                (String) doc.get(Fields.NOTE_TEXT),
-                (long) doc.get(Fields.DATE));
-        answer.setId(id);
-        return answer;
+    fun toDocument(note: NoteEntity): Map<String, Any?> {
+        val result: MutableMap<String, Any?> = HashMap()
+        result[Fields.TITLE] = note.title
+        result[Fields.NOTE_TEXT] = note.noteText
+        result[Fields.DATE] = note.date
+        return result
     }
 
-    public static Map<String, Object> toDocument(NoteEntity note) {
-        Map<String, Object> result = new HashMap<>();
-        result.put(Fields.TITLE, note.getTitle());
-        result.put(Fields.NOTE_TEXT, note.getNoteText());
-        result.put(Fields.DATE, note.getDate());
-        return result;
+    object Fields {
+        const val TITLE = "title"
+        const val NOTE_TEXT = "noteText"
+        const val DATE = "date"
     }
 }

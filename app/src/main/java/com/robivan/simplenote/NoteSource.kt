@@ -1,18 +1,11 @@
-package com.robivan.simplenote;
+package com.robivan.simplenote
 
-public interface NoteSource {
-    NoteSource init(NoteSourceResponse noteSourceResponse);
-
-    NoteEntity getNoteData(int position);
-
-    int size();
-
-    void deleteNoteData(int position);
-
-    void updateNoteData(NoteEntity noteData, int position);
-
-    void addNoteData(NoteEntity noteData);
-
-    void clearNoteData(); //TODO реализовать очистку
+interface NoteSource {
+    fun init(noteSourceResponse: (NoteSource) -> Unit): NoteSource
+    fun getNoteData(position: Int): NoteEntity?
+    fun size(): Int
+    fun deleteNoteData(position: Int)
+    fun updateNoteData(noteData: NoteEntity, position: Int)
+    fun addNoteData(noteData: NoteEntity)
+    fun clearNoteData() //TODO реализовать очистку
 }
-
