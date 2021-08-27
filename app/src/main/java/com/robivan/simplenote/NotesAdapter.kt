@@ -24,7 +24,7 @@ class NotesAdapter : RecyclerView.Adapter<NoteViewHolder>() {
         notifyDataSetChanged()
     }
 
-    interface OnItemClickListener {
+    fun interface OnItemClickListener {
         fun onItemClick(noteEntity: NoteEntity?, position: Int, popupId: Int)
     }
 

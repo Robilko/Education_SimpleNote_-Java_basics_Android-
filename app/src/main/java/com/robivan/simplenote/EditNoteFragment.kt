@@ -68,16 +68,16 @@ class EditNoteFragment : Fragment() {
         }
     }
 
-    private fun changeOrCreateNote(): NoteEntity {
+    private fun changeOrCreateNote(): NoteEntity? {
         val name = noteHeading.text.toString()
         val description = noteTextBody.text.toString()
         val date: Long = NoteEntity.currentDate
-        return if (note != null) ({
+        return if (note != null) {
             note!!.title = name
             note!!.noteText = description
             note!!.date = date
             note
-        })!! else NoteEntity(name, description, date)
+        } else NoteEntity(name, description, date)
     }
 
     private fun fillNote(note: NoteEntity?) {
@@ -97,7 +97,7 @@ class EditNoteFragment : Fragment() {
         get() = activity as Contract?
 
     internal interface Contract {
-        fun saveNote(note: NoteEntity, position: Int)
+        fun saveNote(note: NoteEntity?, position: Int)
     }
 
     companion object {

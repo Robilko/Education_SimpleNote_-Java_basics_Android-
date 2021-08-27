@@ -164,7 +164,7 @@ class MainActivity : AppCompatActivity(), NoteListFragment.Contract, EditNoteFra
         showEditNote(noteEntity, position)
     }
 
-    override fun saveNote(note: NoteEntity, position: Int) {
+    override fun saveNote(note: NoteEntity?, position: Int) {
         supportFragmentManager.popBackStack()
         val noteListFragment =
             supportFragmentManager.findFragmentByTag(NOTES_LIST_FRAGMENT) as NoteListFragment?

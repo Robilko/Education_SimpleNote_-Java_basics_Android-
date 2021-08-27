@@ -13,11 +13,13 @@ object NoteMapping {
         return answer
     }
 
-    fun toDocument(note: NoteEntity): Map<String, Any?> {
+    fun toDocument(note: NoteEntity?): Map<String, Any?> {
         val result: MutableMap<String, Any?> = HashMap()
-        result[Fields.TITLE] = note.title
-        result[Fields.NOTE_TEXT] = note.noteText
-        result[Fields.DATE] = note.date
+        if (note != null) {
+            result[Fields.TITLE] = note.title
+            result[Fields.NOTE_TEXT] = note.noteText
+            result[Fields.DATE] = note.date
+        }
         return result
     }
 

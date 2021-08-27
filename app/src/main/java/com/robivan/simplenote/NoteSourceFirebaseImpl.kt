@@ -15,7 +15,7 @@ class NoteSourceFirebaseImpl : NoteSource {
 
     // Загружаемый список карточек
     private var notesData: MutableList<NoteEntity?>? = ArrayList()
-    override fun init(noteSourceResponse: (NoteSource) -> Unit): NoteSource {
+    override fun init(noteSourceResponse: NoteSourceResponse): NoteSource {
         // Получить всю коллекцию, отсортированную по полю «Дата»
         // При удачном считывании данных загрузим список карточек
         collection.orderBy(NoteMapping.Fields.DATE, Query.Direction.DESCENDING).get()
@@ -54,8 +54,8 @@ class NoteSourceFirebaseImpl : NoteSource {
         }
     }
 
-    override fun updateNoteData(noteData: NoteEntity, position: Int) {
-        val id = noteData.id
+    override fun updateNoteData(noteData: NoteEntity?, position: Int) {
+        val id = noteData?.id
         if (id != null) {
             // Изменить документ по идентификатору
             notesData!![position]?.id?.let { collection.document(it).set(NoteMapping.toDocument(noteData)) }
@@ -63,11 +63,13 @@ class NoteSourceFirebaseImpl : NoteSource {
         }
     }
 
-    override fun addNoteData(noteData: NoteEntity) {
+    override fun addNoteData(noteData: NoteEntity?) {
         // Добавить документ
         collection.add(NoteMapping.toDocument(noteData))
             .addOnSuccessListener { documentReference: DocumentReference ->
-                noteData.id = documentReference.id
+                if (noteData != null) {
+                    noteData.id = documentReference.id
+                }
             }
         notesData!!.add(noteData)
     }

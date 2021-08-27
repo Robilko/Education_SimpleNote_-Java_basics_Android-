@@ -36,13 +36,14 @@ class NoteListFragment : Fragment() {
         setLayoutSettings()
         adapter = NotesAdapter()
         recyclerView.adapter = adapter
-        adapter.setOnItemClickListener({ item: NoteEntity?, position: Int, popupId: Int -> {
+        adapter.setOnItemClickListener { item: NoteEntity?, position: Int, popupId: Int ->
+            run {
                 when (popupId) {
                     adapter.CMD_UPDATE -> contract!!.editNote(item, position)
                     adapter.CMD_DELETE -> deleteNoteAndShowDialog(position)
                 }
             }
-        })
+        }
         data = NoteSourceFirebaseImpl().init { adapter.notifyDataSetChanged() }
         adapter.setDataSource(data)
         createNoteButton.setOnClickListener {
@@ -120,7 +121,7 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    fun addOrUpdateNote(note: NoteEntity, position: Int) {
+    fun addOrUpdateNote(note: NoteEntity?, position: Int) {
         if (data.size() != position) {
             data.updateNoteData(note, position)
         } else {
