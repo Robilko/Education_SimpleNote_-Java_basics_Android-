@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="default_padding">16dp</dimen>
-    <dimen name="default_margin">16dp</dimen>
+    <dimen name="default_padding">8dp</dimen>
+    <dimen name="default_margin">4dp</dimen>
     <dimen name="button_height">56dp</dimen>
     <dimen name="heading_text_size">28sp</dimen>
     <dimen name="body_text_size">20sp</dimen>
     <dimen name="nav_header_height">200dp</dimen>
     <dimen name="nav_header_dimen">42sp</dimen>
+    <dimen name="note_card_radius">16dp</dimen>
+    <dimen name="note_card_elevation">10dp</dimen>
+    <dimen name="half_default_margin">2dp</dimen>
+    <dimen name="date_text_size">10sp</dimen>
 </resources>

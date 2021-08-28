@@ -1,45 +1,64 @@
 package com.robivan.simplenote;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class NoteListFragment extends Fragment {
-    private MaterialButton createNoteButton;
-    private LinearLayout listLayout;
 
-    private final ArrayList<NoteEntity> noteList = new ArrayList<>();
+    private MaterialButton createNoteButton;
+    private RecyclerView recyclerView;
+    private NotesAdapter adapter;
+    private NoteSource data;
+    private int noteListLayout;
+    private SharedPreferences preferences;
+    private static final String APP_PREFERENCES = "my_settings";
+    private static final String LAYOUT_SETTINGS = "layout_settings";
+    private static final int CMD_STAGGERED_GRID = 0;
+    private static final int CMD_LINEAR = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
-        createNoteButton = view.findViewById(R.id.create_new_note);
-        listLayout = view.findViewById(R.id.list_layout);
+        setHasOptionsMenu(true);
         return view;
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        renderList(noteList);
-        createNoteButton.setOnClickListener(v -> getContract().createNewNote());
+        preferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        initView(view);
+        setLayoutSettings();
+        adapter = new NotesAdapter();
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener((item, position, popupId) -> {
+            if (popupId == adapter.CMD_UPDATE) {
+                getContract().editNote(item, position);
+            } else if (popupId == adapter.CMD_DELETE) {
+                deleteNoteAndShowDialog(position);
+            }
+
+        });
+        data = new NoteSourceFirebaseImpl().init(noteSource -> adapter.notifyDataSetChanged());
+        adapter.setDataSource(data);
+        createNoteButton.setOnClickListener(v -> getContract().createNewNote(data.size()));
     }
 
     @Override
@@ -50,64 +69,92 @@ public class NoteListFragment extends Fragment {
         }
     }
 
-    public void addNote(NoteEntity note) {
-        NoteEntity sameNote = findNoteById(note.id);
-        if (sameNote != null) {
-            noteList.remove(sameNote);
-        }
-        noteList.add(note);
-        renderList(noteList);
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.note_list_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Nullable
-    private NoteEntity findNoteById(String id) {
-        for(NoteEntity note : noteList) {
-            if (note.id.equals(id)) return note;
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.change_layout_menu) {
+            noteListLayout = preferences.getInt(LAYOUT_SETTINGS, 0);
+            if (noteListLayout == CMD_STAGGERED_GRID) {
+                preferences.edit().putInt(LAYOUT_SETTINGS, CMD_LINEAR).apply();
+            } else {
+                preferences.edit().putInt(LAYOUT_SETTINGS, CMD_STAGGERED_GRID).apply();
+            }
+            setLayoutSettings();
+            return true;
         }
-        return null;
+        return super.onOptionsItemSelected(item);
     }
 
-    private void renderList(List<NoteEntity> notes) {
-        listLayout.removeAllViews();
-        for (NoteEntity note : notes) {
-            Button button = new Button(getContext());
-            button.setText(note.title);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Activity activity = requireActivity();
-                    PopupMenu popupMenu = new PopupMenu(activity, v);
-                    activity.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            int id = item.getItemId();
-                            switch (id) {
-                                case R.id.edit_note_popup:
-                                    getContract().editNote(note);
-                                    return true;
-                                case R.id.add_note_to_favorite_popup:  //TODO реализовать добавление заметки в избранное
-                                case R.id.delete_popup:                //TODO реализовать удаление заметки
-                                    Toast.makeText(getContext(), getResources().getString(R.string.do_not_realised_toast),
-                                            Toast.LENGTH_SHORT).show();
-                                    return true;
-                            }
-                            return true;
-                        }
-                    });
-                    popupMenu.show();
-                }
-            });
-            listLayout.addView(button);
+    private void deleteNoteAndShowDialog(int position) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.alert_title_delete_note)
+                .setMessage(R.string.alert_message_delete_note)
+                .setCancelable(false)
+                .setPositiveButton(R.string.positive_button, (d, i) -> {
+                    data.deleteNoteData(position);
+                    adapter.notifyItemRemoved(position);
+                })
+                .setNegativeButton(R.string.negative_button, (d, i) -> {
+                })
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .show();
+    }
+
+    private void initView(View view) {
+        createNoteButton = view.findViewById(R.id.create_new_note);
+        recyclerView = view.findViewById(R.id.recycler_view);
+    }
+
+    private void setLayoutSettings() {
+        if (!preferences.contains(LAYOUT_SETTINGS)) {
+            preferences.edit().putInt(LAYOUT_SETTINGS, CMD_STAGGERED_GRID).apply();
+        } else {
+            noteListLayout = preferences.getInt(LAYOUT_SETTINGS, 0);
+            if (noteListLayout == CMD_STAGGERED_GRID) {
+                setStaggeredGridLayoutFromOrientation();
+            } else if (noteListLayout == CMD_LINEAR) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            }
         }
+    }
+
+    private void setStaggeredGridLayoutFromOrientation() {
+        if (getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        } else {
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        }
+    }
+
+    public void addOrUpdateNote(NoteEntity note, int position) {
+        if (data.size() != position) {
+            data.updateNoteData(note, position);
+        } else {
+            data.addNoteData(note);
+        }
+        //метод init ооповещает обозревателей
+        data.init(noteSource -> adapter.notifyDataSetChanged());
+        //позицианируется на новой позиции
+        recyclerView.smoothScrollToPosition(position);
+    }
+
+    public static int getTitle() {
+        return R.string.notes_list_title;
     }
 
     private Contract getContract() {
-        return (Contract)getActivity();
+        return (Contract) getActivity();
     }
 
-    interface Contract{
-        void createNewNote();
-        void editNote(NoteEntity noteEntity);
+    interface Contract {
+        void createNewNote(int position);
+
+        void editNote(NoteEntity noteEntity, int position);
     }
 }

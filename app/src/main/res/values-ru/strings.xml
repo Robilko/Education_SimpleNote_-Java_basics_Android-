@@ -4,7 +4,7 @@
     <string name="create_new_note">Новая заметка</string>
     <string name="note_item_head">Заголовок</string>
     <string name="note_text_body">Добавьте текст заметки</string>
-    <string name="note_item_date">Дата создания: \u0020</string>
+    <string name="note_item_date">Последнее изменение: \u0020</string>
     <string name="save_btn_name">Сохранить</string>
     <string name="create_note_title">Новая заметка</string>
     <string name="edit_note_title">Редактировать заметку</string>
@@ -18,6 +18,7 @@
     <string name="deleted">Удаленные</string>
     <string name="navigation_drawer_open">Открыть навигационную панель</string>
     <string name="navigation_drawer_close">Закрыть навигационную панель</string>
+    <string name="notes_list_title">Список заметок</string>
 
     <string name="about_app_toast">
         Приложение \"Простые заметки\" было разработано как учебный проект на курсе разработки под Android Университета GeekBrains.
@@ -25,5 +26,13 @@
         \n Разработчик: Робилко Александр
         \n e-mail: sasha.robson@google.com
     </string>
+    <string name="continue_btn">Продолжить…</string>
+    <string name="alert_title_delete_note">Внимание!</string>
+    <string name="alert_message_delete_note">Вы уверены? Заметка будет удалена</string>
+    <string name="positive_button">Да</string>
+    <string name="negative_button">Нет</string>
+    <string name="on_back_pressed_exit">Нажмите еще раз для выхода!</string>
+    <string name="change_layout_menu_title">Сменить макет</string>
+
 
 </resources>

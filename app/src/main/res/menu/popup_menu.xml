@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:title="@string/edit_note_title"
         android:id="@+id/edit_note_popup"
-        android:icon="@android:drawable/ic_menu_edit"/>
+        android:icon="@android:drawable/ic_menu_edit" />
 
     <item
         android:title="@string/add_note_to_favorites"
         android:id="@+id/add_note_to_favorite_popup"
-        android:icon="@android:drawable/btn_star"/>
+        android:icon="@android:drawable/btn_star" />
 
     <item
         android:title="@string/delete"
         android:id="@+id/delete_popup"
-        android:icon="@android:drawable/ic_menu_delete"/>
+        android:icon="@android:drawable/ic_menu_delete" />
 </menu>
