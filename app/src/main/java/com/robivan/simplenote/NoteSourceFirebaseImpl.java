@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 public class NoteSourceFirebaseImpl implements NoteSource {
 
-    private static final String NOTES_COLLECTION = "notes";
+    private static final String NOTES_COLLECTION = User.getEmailUser();
     private static final String TAG = "NoteSourceFirebaseImpl";
 
     // База данных Firestore

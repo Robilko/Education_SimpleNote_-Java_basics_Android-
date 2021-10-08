@@ -32,6 +32,14 @@
             android:maxLines="4"
             android:textSize="@dimen/body_text_size"
             tools:text="@string/note_text_body" />
+
+        <TextView
+            android:id="@+id/subject_date_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textSize="@dimen/date_text_size"
+            tools:text="@string/some_date" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

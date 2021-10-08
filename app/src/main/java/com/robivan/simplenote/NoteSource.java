@@ -7,7 +7,7 @@ public interface NoteSource {
 
     int size();
 
-    void deleteNoteData(int position); //TODO реализовать удаление
+    void deleteNoteData(int position);
 
     void updateNoteData(NoteEntity noteData, int position);
 

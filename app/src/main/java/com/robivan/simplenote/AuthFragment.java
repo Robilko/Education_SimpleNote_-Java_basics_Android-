@@ -134,7 +134,7 @@ public class AuthFragment extends Fragment {
     // Обновляем данные о пользователе на экране
     private void updateUI() {
         emailView.setText(account.getEmail());
-        User.getUserData(account.getGivenName());
+        User.getUserData(account.getGivenName(), account.getEmail());
     }
 
     // Разрешить аутентификацию и запретить остальные действия
