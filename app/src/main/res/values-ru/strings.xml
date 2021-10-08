@@ -18,6 +18,7 @@
     <string name="deleted">Удаленные</string>
     <string name="navigation_drawer_open">Открыть навигационную панель</string>
     <string name="navigation_drawer_close">Закрыть навигационную панель</string>
+    <string name="notes_list_title">Список заметок</string>
 
     <string name="about_app_toast">
         Приложение \"Простые заметки\" было разработано как учебный проект на курсе разработки под Android Университета GeekBrains.
@@ -25,5 +26,7 @@
         \n Разработчик: Робилко Александр
         \n e-mail: sasha.robson@google.com
     </string>
+    <string name="continue_btn">Продолжить…</string>
+
 
 </resources>
